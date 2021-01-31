@@ -36,94 +36,101 @@ class SignInForm extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                TextFormField(
-                  onChanged: (value) => context
-                      .read<SignInFormBloc>()
-                      .add(SignInFormEvent.emailChange(value)),
-                  validator: (_) => context
-                      .read<SignInFormBloc>()
-                      .state
-                      .emailAddress
-                      .value
-                      .fold(
-                        (f) => f.maybeMap(
-                            invalidEmail: (_) => 'Invalid Email',
-                            orElse: () => null),
-                        (r) => null,
-                      ),
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    labelText: 'Email',
-                  ),
-                  autocorrect: false,
-                ),
+                _buildEmail(context),
                 const SizedBox(
                   height: 8,
                 ),
-                TextFormField(
-                  onChanged: (value) => context
-                      .read<SignInFormBloc>()
-                      .add(SignInFormEvent.passowrdChanaged(value)),
-                  validator: (_) =>
-                      context.read<SignInFormBloc>().state.password.value.fold(
-                            (f) => f.maybeMap(
-                                shortPassword: (_) => 'Short Password',
-                                orElse: () => null),
-                            (r) => null,
-                          ),
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    labelText: 'Password',
-                  ),
-                  autocorrect: false,
-                ),
+                _buildPassword(context),
                 const SizedBox(
                   height: 8,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FlatButton(
-                        onPressed: () {
-                          context.read<SignInFormBloc>().add(
-                                const SignInFormEvent
-                                    .signInWithEmailAndPasswordPress(),
-                              );
-                        },
-                        child: const Text('SIGN IN'),
-                      ),
-                    ),
-                    Expanded(
-                      child: FlatButton(
-                        onPressed: () {
-                          context.read<SignInFormBloc>().add(
-                                const SignInFormEvent
-                                    .registerWithEmailAndPasswordPress(),
-                              );
-                        },
-                        child: const Text('REGISTER'),
-                      ),
-                    )
-                  ],
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    context.read<SignInFormBloc>().add(
-                          const SignInFormEvent.signInWithGooglePress(),
-                        );
-                  },
-                  color: Colors.lightBlue,
-                  child: const Text(
-                    'SIGN IN WITH GOOGLE',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                )
+                _buildSignInRegisterButtons(context),
+                _buildSignInWithGoogleButton(context)
               ],
             ));
       },
+    );
+  }
+
+  RaisedButton _buildSignInWithGoogleButton(BuildContext context) {
+    return RaisedButton(
+      onPressed: () {
+        context.read<SignInFormBloc>().add(
+              const SignInFormEvent.signInWithGooglePress(),
+            );
+      },
+      color: Colors.lightBlue,
+      child: const Text(
+        'SIGN IN WITH GOOGLE',
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Row _buildSignInRegisterButtons(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: FlatButton(
+            onPressed: () {
+              context.read<SignInFormBloc>().add(
+                    const SignInFormEvent.signInWithEmailAndPasswordPress(),
+                  );
+            },
+            child: const Text('SIGN IN'),
+          ),
+        ),
+        Expanded(
+          child: FlatButton(
+            onPressed: () {
+              context.read<SignInFormBloc>().add(
+                    const SignInFormEvent.registerWithEmailAndPasswordPress(),
+                  );
+            },
+            child: const Text('REGISTER'),
+          ),
+        )
+      ],
+    );
+  }
+
+  TextFormField _buildPassword(BuildContext context) {
+    return TextFormField(
+      onChanged: (value) => context
+          .read<SignInFormBloc>()
+          .add(SignInFormEvent.passowrdChanaged(value)),
+      validator: (_) =>
+          context.read<SignInFormBloc>().state.password.value.fold(
+                (f) => f.maybeMap(
+                    shortPassword: (_) => 'Short Password', orElse: () => null),
+                (r) => null,
+              ),
+      obscureText: true,
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.lock),
+        labelText: 'Password',
+      ),
+      autocorrect: false,
+    );
+  }
+
+  TextFormField _buildEmail(BuildContext context) {
+    return TextFormField(
+      onChanged: (value) => context
+          .read<SignInFormBloc>()
+          .add(SignInFormEvent.emailChange(value)),
+      validator: (_) =>
+          context.read<SignInFormBloc>().state.emailAddress.value.fold(
+                (f) => f.maybeMap(
+                    invalidEmail: (_) => 'Invalid Email', orElse: () => null),
+                (r) => null,
+              ),
+      keyboardType: TextInputType.emailAddress,
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.email),
+        labelText: 'Email',
+      ),
+      autocorrect: false,
     );
   }
 }
