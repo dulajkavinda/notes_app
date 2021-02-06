@@ -23,31 +23,37 @@ class SignInForm extends StatelessWidget {
       },
       builder: (context, state) {
         return Form(
-            autovalidateMode: state.showErrorMessage
-                ? AutovalidateMode.always
-                : AutovalidateMode.disabled,
-            child: ListView(
-              children: [
-                const Text(
-                  '📝',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 130.0),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                _buildEmail(context),
-                const SizedBox(
-                  height: 8,
-                ),
-                _buildPassword(context),
-                const SizedBox(
-                  height: 8,
-                ),
-                _buildSignInRegisterButtons(context),
-                _buildSignInWithGoogleButton(context)
-              ],
-            ));
+          autovalidateMode: state.showErrorMessage
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
+          child: ListView(
+            padding: const EdgeInsets.all(8.0),
+            children: [
+              const Text(
+                '📝',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 130.0),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              _buildEmail(context),
+              const SizedBox(
+                height: 8,
+              ),
+              _buildPassword(context),
+              const SizedBox(
+                height: 8,
+              ),
+              _buildSignInRegisterButtons(context),
+              _buildSignInWithGoogleButton(context),
+              if (state.isSubmitting) ...[
+                const LinearProgressIndicator(),
+                const SizedBox(height: 8.0)
+              ]
+            ],
+          ),
+        );
       },
     );
   }
